@@ -9,3 +9,11 @@
       dest: /tmp/
       owner: root
       group: root
+  - name: Run the equivalent of "apt-get update" as a separate step
+    ansible.builtin.apt:
+      update_cache: yes
+  - name: Install packages
+    ansible.builtin.apt:
+      pkg:
+      - git
+      - python3-pip
