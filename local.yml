@@ -1,10 +1,11 @@
 ---
 - hosts: all
-
+  become: yes
+  become_user: root
   tasks:
   - name: install example application
-    copy: 
-      src: ansible_test_app 
+    copy:
+      src: ansible_test_app
       dest: /tmp/
       owner: root
       group: root
