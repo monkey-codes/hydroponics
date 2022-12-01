@@ -1,5 +1,5 @@
 ---
-- hosts: all
+- hosts: local
   become: yes
   become_user: root
   tasks:
@@ -17,8 +17,4 @@
       pkg:
       - git
       - python3-pip
-  - name: Install packages
-    ansible.builtin.apt:
-      pkg:
-      - git
-      - python3-pip
+
