@@ -3,15 +3,20 @@
   become: yes
   become_user: root
   tasks:
-  - name: install example application
-    copy:
-      src: ansible_test_app
-      dest: /tmp/
-      owner: root
-      group: root
-  - name: Run the equivalent of "apt-get update" as a separate step
+    #  - name: install example application
+    #    copy:
+    #      src: ansible_test_app
+    #      dest: /tmp/
+    #      owner: root
+    #      group: root
+    #  - name: Run the equivalent of "apt-get update" as a separate step
+    #    ansible.builtin.apt:
+    #      update_cache: yes
+  - name: Install packages
     ansible.builtin.apt:
-      update_cache: yes
+      pkg:
+      - git
+      - python3-pip
   - name: Install packages
     ansible.builtin.apt:
       pkg:
