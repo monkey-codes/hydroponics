@@ -73,33 +73,33 @@ print("Script invoked with change {}".format(__name__))
 #print("Script invoked {}".format(__name__))
 if __name__ == '__main__':
 
-    print("Inside main")
+    print("Inside main", flush=True)
     mqtt_connection = cmdUtils.build_mqtt_connection(on_connection_interrupted, on_connection_resumed)
 
     if is_ci == False:
         print("Connecting to {} with client ID '{}'...".format(
-            cmdUtils.get_command(cmdUtils.m_cmd_endpoint), cmdUtils.get_command("client_id")))
+            cmdUtils.get_command(cmdUtils.m_cmd_endpoint), cmdUtils.get_command("client_id")), flush=True)
     else:
         print("Connecting to endpoint with client ID")
     connect_future = mqtt_connection.connect()
 
     # Future.result() waits until a result is available
     connect_future.result()
-    print("Connected!")
+    print("Connected!", flush=True)
 
     message_count = cmdUtils.get_command("count")
     message_topic = cmdUtils.get_command(cmdUtils.m_cmd_topic)
     message_string = cmdUtils.get_command(cmdUtils.m_cmd_message)
 
     # Subscribe
-    print("Subscribing to topic '{}'...".format(message_topic))
+    print("Subscribing to topic '{}'...".format(message_topic), flush=True)
     subscribe_future, packet_id = mqtt_connection.subscribe(
         topic=message_topic,
         qos=mqtt.QoS.AT_LEAST_ONCE,
         callback=on_message_received)
 
     subscribe_result = subscribe_future.result()
-    print("Subscribed with {}".format(str(subscribe_result['qos'])))
+    print("Subscribed with {}".format(str(subscribe_result['qos'])), flush=True)
 #
 #    # Publish message to server desired number of times.
 #    # This step is skipped if message is blank.
@@ -125,10 +125,10 @@ if __name__ == '__main__':
     # Wait for all messages to be received.
     # This waits forever if count was set to 0.
     if message_count != 0 and not received_all_event.is_set():
-        print("Waiting for all messages to be received...")
+        print("Waiting for all messages to be received...", flush=True)
 
-    #received_all_event.wait()
-    #print("{} message(s) received.".format(received_count))
+    received_all_event.wait()
+    print("{} message(s) received.".format(received_count))
 #
 #    # Disconnect
 #    print("Disconnecting...")
