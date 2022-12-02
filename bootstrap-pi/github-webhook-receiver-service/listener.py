@@ -26,13 +26,11 @@ cmdUtils.register_command("cert", "<path>", "Path to your client certificate in 
 cmdUtils.register_command("port", "<int>", "Connection port. AWS IoT supports 443 and 8883 (optional, default=auto).", type=int)
 cmdUtils.register_command("client_id", "<str>", "Client ID to use for MQTT connection (optional, default='test-*').", default="test-" + str(uuid4()))
 cmdUtils.register_command("count", "<int>", "The number of messages to send (optional, default='10').", default=10, type=int)
-cmdUtils.register_command("is_ci", "<str>", "If present the sample will run in CI mode (optional, default='None')")
 # Needs to be called so the command utils parse the commands
 cmdUtils.get_args()
 
 received_count = 0
 received_all_event = threading.Event()
-is_ci = cmdUtils.get_command("is_ci", None) != None
 
 # Callback when connection is accidentally lost.
 def on_connection_interrupted(connection, error, **kwargs):
@@ -69,17 +67,12 @@ def on_message_received(topic, payload, dup, qos, retain, **kwargs):
     if received_count == cmdUtils.get_command("count"):
         received_all_event.set()
 
-print("Script invoked with change {}".format(__name__))
-#print("Script invoked {}".format(__name__))
 if __name__ == '__main__':
 
     mqtt_connection = cmdUtils.build_mqtt_connection(on_connection_interrupted, on_connection_resumed)
 
-    if is_ci == False:
-        print("Connecting to {} with client ID '{}'...".format(
-            cmdUtils.get_command(cmdUtils.m_cmd_endpoint), cmdUtils.get_command("client_id")), flush=True)
-    else:
-        print("Connecting to endpoint with client ID")
+    print("Connecting to {} with client ID '{}'...".format(
+        cmdUtils.get_command(cmdUtils.m_cmd_endpoint), cmdUtils.get_command("client_id")), flush=True)
     connect_future = mqtt_connection.connect()
 
     # Future.result() waits until a result is available
@@ -99,30 +92,6 @@ if __name__ == '__main__':
 
     subscribe_result = subscribe_future.result()
     print("Subscribed with {}".format(str(subscribe_result['qos'])), flush=True)
-#
-#    # Publish message to server desired number of times.
-#    # This step is skipped if message is blank.
-#    # This step loops forever if count was set to 0.
-#    if message_string:
-#        if message_count == 0:
-#            print ("Sending messages until program killed")
-#        else:
-#            print ("Sending {} message(s)".format(message_count))
-#
-#        publish_count = 1
-#        while (publish_count <= message_count) or (message_count == 0):
-#            message = "{} [{}]".format(message_string, publish_count)
-#            print("Publishing message to topic '{}': {}".format(message_topic, message))
-#            message_json = json.dumps(message)
-#            mqtt_connection.publish(
-#                topic=message_topic,
-#                payload=message_json,
-#                qos=mqtt.QoS.AT_LEAST_ONCE)
-#            time.sleep(1)
-#            publish_count += 1
-#
-    # Wait for all messages to be received.
-    # This waits forever if count was set to 0.
     if message_count != 0 and not received_all_event.is_set():
         print("Waiting for all messages to be received...", flush=True)
 
