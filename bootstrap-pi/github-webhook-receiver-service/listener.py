@@ -81,7 +81,6 @@ if __name__ == '__main__':
 
     message_count = cmdUtils.get_command("count")
     message_topic = cmdUtils.get_command(cmdUtils.m_cmd_topic)
-    message_string = cmdUtils.get_command(cmdUtils.m_cmd_message)
 
     # Subscribe
     print("Subscribing to topic '{}'...".format(message_topic), flush=True)
