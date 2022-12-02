@@ -1,12 +1,12 @@
 # Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0.
 
-#from awscrt import mqtt
-#import sys
-#import threading
-#import time
-#from uuid import uuid4
-#import json
+from awscrt import mqtt
+import sys
+import threading
+import time
+from uuid import uuid4
+import json
 
 # This sample uses the Message Broker for AWS IoT to send and receive messages
 # through an MQTT connection. On startup, the device connects to the server,
