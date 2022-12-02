@@ -36,15 +36,15 @@ is_ci = cmdUtils.get_command("is_ci", None) != None
 
 # Callback when connection is accidentally lost.
 def on_connection_interrupted(connection, error, **kwargs):
-    print("Connection interrupted. error: {}".format(error))
+    print("Connection interrupted. error: {}".format(error), flush=True)
 
 
 # Callback when an interrupted connection is re-established.
 def on_connection_resumed(connection, return_code, session_present, **kwargs):
-    print("Connection resumed. return_code: {} session_present: {}".format(return_code, session_present))
+    print("Connection resumed. return_code: {} session_present: {}".format(return_code, session_present), flush=True)
 
     if return_code == mqtt.ConnectReturnCode.ACCEPTED and not session_present:
-        print("Session did not persist. Resubscribing to existing topics...")
+        print("Session did not persist. Resubscribing to existing topics...", flush=True)
         resubscribe_future, _ = connection.resubscribe_existing_topics()
 
         # Cannot synchronously wait for resubscribe result because we're on the connection's event-loop thread,
@@ -54,7 +54,7 @@ def on_connection_resumed(connection, return_code, session_present, **kwargs):
 
 def on_resubscribe_complete(resubscribe_future):
     resubscribe_results = resubscribe_future.result()
-    print("Resubscribe results: {}".format(resubscribe_results))
+    print("Resubscribe results: {}".format(resubscribe_results), flush=True)
 
     for topic, qos in resubscribe_results['topics']:
         if qos is None:
@@ -73,7 +73,6 @@ print("Script invoked with change {}".format(__name__))
 #print("Script invoked {}".format(__name__))
 if __name__ == '__main__':
 
-    print("Inside main", flush=True)
     mqtt_connection = cmdUtils.build_mqtt_connection(on_connection_interrupted, on_connection_resumed)
 
     if is_ci == False:
@@ -128,10 +127,10 @@ if __name__ == '__main__':
         print("Waiting for all messages to be received...", flush=True)
 
     received_all_event.wait()
-    print("{} message(s) received.".format(received_count))
-#
-#    # Disconnect
-#    print("Disconnecting...")
-#    disconnect_future = mqtt_connection.disconnect()
-#    disconnect_future.result()
-    print("Disconnected!")
+    print("{} message(s) received.".format(received_count), flush=True)
+
+    # Disconnect
+    print("Disconnecting...", flush=True)
+    disconnect_future = mqtt_connection.disconnect()
+    disconnect_future.result()
+    print("Disconnected!", flush=True)
