@@ -8,7 +8,7 @@ Type=simple
 Restart=always
 RestartSec=5
 User=hydro
-ExecStart=/usr/bin/python3 /home/hydro/github-webhook-receiver-service/listener.py --endpoint a1jt3uh16ux115-ats.iot.ap-southeast-2.amazonaws.com --ca_file /home/hydro/github-webhook-receiver-service/root-CA.crt --cert /home/hydro/github-webhook-receiver-service/cicdtest.cert.pem --key /home/hydro/github-webhook-receiver-service/cicdtest.private.key --client_id basicPubSub --topic sdk/test/Python --count 0
+ExecStart=/usr/bin/python3 listener.py --endpoint a1jt3uh16ux115-ats.iot.ap-southeast-2.amazonaws.com --ca_file ../root-CA.crt --cert ../cicdtest.cert.pem --key ../cicdtest.private.key --client_id basicPubSub --topic sdk/test/Python --count 0
 
 [Install]
 WantedBy=multi-user.target
