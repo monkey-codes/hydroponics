@@ -46,3 +46,27 @@
     ansible.builtin.get_url:
       url: https://www.amazontrust.com/repository/AmazonRootCA1.pem
       dest: /home/hydro/root-CA.crt
+  - name: Link github webhook receiver systemd service file
+    ansible.builtin.file:
+      src: /home/hydro/github-webhook-receiver-service/github-webhook-receiver.service
+      dest: /etc/systemd/system/
+      owner: root
+      group: root
+      state: link
+  - name: Enable github webhook receiver service
+    ansible.builtin.systemd:
+      name: github-webhook-receiver.service
+      enabled: yes
+  - name: Restart github webhook receiver service and esure config is reloaded
+    ansible.builtin.systemd:
+      state: restarted
+      daemon_reload: yes
+      name: github-webhook-receiver.service
+      #  - name: Copy github webhook receiver systemd service file
+      #    copy:
+      #      src: github-webhook-receiver-service/github-webhook-receiver.service
+      #      dest: /etc/systemd/system/
+      #      owner: hydro
+      #      group: hydro
+
+
