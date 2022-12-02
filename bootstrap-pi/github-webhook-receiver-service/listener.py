@@ -75,13 +75,13 @@ if __name__ == '__main__':
 
     print("Inside main")
     mqtt_connection = cmdUtils.build_mqtt_connection(on_connection_interrupted, on_connection_resumed)
-#
-#    if is_ci == False:
-#        print("Connecting to {} with client ID '{}'...".format(
-#            cmdUtils.get_command(cmdUtils.m_cmd_endpoint), cmdUtils.get_command("client_id")))
-#    else:
-#        print("Connecting to endpoint with client ID")
-#    connect_future = mqtt_connection.connect()
+
+    if is_ci == False:
+        print("Connecting to {} with client ID '{}'...".format(
+            cmdUtils.get_command(cmdUtils.m_cmd_endpoint), cmdUtils.get_command("client_id")))
+    else:
+        print("Connecting to endpoint with client ID")
+    connect_future = mqtt_connection.connect()
 #
 #    # Future.result() waits until a result is available
 #    connect_future.result()
