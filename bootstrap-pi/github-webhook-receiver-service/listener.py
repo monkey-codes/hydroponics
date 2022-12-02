@@ -115,7 +115,7 @@ if __name__ == '__main__':
                 topic=message_topic,
                 payload=message_json,
                 qos=mqtt.QoS.AT_LEAST_ONCE)
-            time.sleep(1)
+            time.sleep(5)
             publish_count += 1
 
     # Wait for all messages to be received.

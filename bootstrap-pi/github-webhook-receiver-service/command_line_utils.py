@@ -72,7 +72,7 @@ class CommandLineUtils:
 
     def add_common_topic_message_commands(self):
         self.register_command(self.m_cmd_topic, "<str>", "Topic to publish, subscribe to (optional, default='test/topic').", default="test/topic")
-        self.register_command(self.m_cmd_message, "<str>", "The message to send in the payload (optional, default='Hello World!').", default="")
+        self.register_command(self.m_cmd_message, "<str>", "The message to send in the payload (optional, default='Hello World!').", default="Hello World!")
 
     def add_common_logging_commands(self):
         self.register_command(self.m_cmd_verbosity, "<Log Level>", "Logging level.", default=io.LogLevel.NoLogs.name, choices=[x.name for x in io.LogLevel])
