@@ -35,3 +35,10 @@
     ansible.builtin.pip:
       name:
         - awsiotsdk
+  - name: Copy webhook receiver service
+    copy:
+      src: github-webhook-receiver-service
+      dest: /home/hydro/
+      owner: hydro
+      group: hydro
+
