@@ -1,5 +1,6 @@
 ---
 - hosts: local
+  name: bootstrap
   become: yes
   become_user: root
   tasks:
@@ -12,6 +13,17 @@
     #  - name: Run the equivalent of "apt-get update" as a separate step
     #    ansible.builtin.apt:
     #      update_cache: yes
+  - name: Create group
+    group:
+      name: hydro
+      state: present
+  - name: Create user
+    user:
+      name: hydro
+      state: present
+      shell: /bin/bash
+      group: hydro
+
   - name: Install packages
     ansible.builtin.apt:
       pkg:
