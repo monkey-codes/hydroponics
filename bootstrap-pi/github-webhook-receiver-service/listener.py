@@ -14,6 +14,7 @@ import json
 # The device should receive those same messages back from the message broker,
 # since it is subscribed to that same topic.
 
+print("Script invoked {}".format(__name__))
 # Parse arguments
 import command_line_utils;
 cmdUtils = command_line_utils.CommandLineUtils("PubSub - Send and recieve messages through an MQTT connection.")
