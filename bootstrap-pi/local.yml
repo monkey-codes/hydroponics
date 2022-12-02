@@ -49,7 +49,7 @@
   - name: Link github webhook receiver systemd service file
     ansible.builtin.file:
       src: /home/hydro/github-webhook-receiver-service/github-webhook-receiver.service
-      dest: /etc/systemd/system/
+      dest: /etc/systemd/system/github-webhook-receiver.service
       owner: root
       group: root
       state: link
