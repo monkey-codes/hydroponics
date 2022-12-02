@@ -29,6 +29,7 @@
       pkg:
       - git
       - python3-pip
+      - zip
 
   - name: Install python packages
     ansible.builtin.pip:
