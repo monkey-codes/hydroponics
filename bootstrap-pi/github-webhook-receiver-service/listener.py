@@ -17,24 +17,24 @@ import json
 import command_line_utils;
 print("Script invoked {}".format(__name__))
 # Parse arguments
-#cmdUtils = command_line_utils.CommandLineUtils("PubSub - Send and recieve messages through an MQTT connection.")
-#cmdUtils.add_common_mqtt_commands()
-#cmdUtils.add_common_topic_message_commands()
-#cmdUtils.add_common_proxy_commands()
-#cmdUtils.add_common_logging_commands()
-#cmdUtils.register_command("key", "<path>", "Path to your key in PEM format.", True, str)
-#cmdUtils.register_command("cert", "<path>", "Path to your client certificate in PEM format.", True, str)
-#cmdUtils.register_command("port", "<int>", "Connection port. AWS IoT supports 443 and 8883 (optional, default=auto).", type=int)
-#cmdUtils.register_command("client_id", "<str>", "Client ID to use for MQTT connection (optional, default='test-*').", default="test-" + str(uuid4()))
-#cmdUtils.register_command("count", "<int>", "The number of messages to send (optional, default='10').", default=10, type=int)
-#cmdUtils.register_command("is_ci", "<str>", "If present the sample will run in CI mode (optional, default='None')")
-## Needs to be called so the command utils parse the commands
-#cmdUtils.get_args()
-#
-#received_count = 0
-#received_all_event = threading.Event()
-#is_ci = cmdUtils.get_command("is_ci", None) != None
-#
+cmdUtils = command_line_utils.CommandLineUtils("PubSub - Send and recieve messages through an MQTT connection.")
+cmdUtils.add_common_mqtt_commands()
+cmdUtils.add_common_topic_message_commands()
+cmdUtils.add_common_proxy_commands()
+cmdUtils.add_common_logging_commands()
+cmdUtils.register_command("key", "<path>", "Path to your key in PEM format.", True, str)
+cmdUtils.register_command("cert", "<path>", "Path to your client certificate in PEM format.", True, str)
+cmdUtils.register_command("port", "<int>", "Connection port. AWS IoT supports 443 and 8883 (optional, default=auto).", type=int)
+cmdUtils.register_command("client_id", "<str>", "Client ID to use for MQTT connection (optional, default='test-*').", default="test-" + str(uuid4()))
+cmdUtils.register_command("count", "<int>", "The number of messages to send (optional, default='10').", default=10, type=int)
+cmdUtils.register_command("is_ci", "<str>", "If present the sample will run in CI mode (optional, default='None')")
+# Needs to be called so the command utils parse the commands
+cmdUtils.get_args()
+
+received_count = 0
+received_all_event = threading.Event()
+is_ci = cmdUtils.get_command("is_ci", None) != None
+
 ## Callback when connection is accidentally lost.
 #def on_connection_interrupted(connection, error, **kwargs):
 #    print("Connection interrupted. error: {}".format(error))
