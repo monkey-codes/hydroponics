@@ -71,65 +71,67 @@ def on_message_received(topic, payload, dup, qos, retain, **kwargs):
 
 print("Script invoked with change {}".format(__name__))
 #print("Script invoked {}".format(__name__))
-#if __name__ == '__main__':
-#    mqtt_connection = cmdUtils.build_mqtt_connection(on_connection_interrupted, on_connection_resumed)
-#
-#    if is_ci == False:
-#        print("Connecting to {} with client ID '{}'...".format(
-#            cmdUtils.get_command(cmdUtils.m_cmd_endpoint), cmdUtils.get_command("client_id")))
-#    else:
-#        print("Connecting to endpoint with client ID")
-#    connect_future = mqtt_connection.connect()
-#
-#    # Future.result() waits until a result is available
-#    connect_future.result()
-#    print("Connected!")
-#
-#    message_count = cmdUtils.get_command("count")
-#    message_topic = cmdUtils.get_command(cmdUtils.m_cmd_topic)
-#    message_string = cmdUtils.get_command(cmdUtils.m_cmd_message)
-#
-#    # Subscribe
-#    print("Subscribing to topic '{}'...".format(message_topic))
-#    subscribe_future, packet_id = mqtt_connection.subscribe(
-#        topic=message_topic,
-#        qos=mqtt.QoS.AT_LEAST_ONCE,
-#        callback=on_message_received)
-#
-#    subscribe_result = subscribe_future.result()
-#    print("Subscribed with {}".format(str(subscribe_result['qos'])))
-#
-#    # Publish message to server desired number of times.
-#    # This step is skipped if message is blank.
-#    # This step loops forever if count was set to 0.
-#    if message_string:
-#        if message_count == 0:
-#            print ("Sending messages until program killed")
-#        else:
-#            print ("Sending {} message(s)".format(message_count))
-#
-#        publish_count = 1
-#        while (publish_count <= message_count) or (message_count == 0):
-#            message = "{} [{}]".format(message_string, publish_count)
-#            print("Publishing message to topic '{}': {}".format(message_topic, message))
-#            message_json = json.dumps(message)
-#            mqtt_connection.publish(
-#                topic=message_topic,
-#                payload=message_json,
-#                qos=mqtt.QoS.AT_LEAST_ONCE)
-#            time.sleep(1)
-#            publish_count += 1
-#
-#    # Wait for all messages to be received.
-#    # This waits forever if count was set to 0.
-#    if message_count != 0 and not received_all_event.is_set():
-#        print("Waiting for all messages to be received...")
-#
-#    received_all_event.wait()
-#    print("{} message(s) received.".format(received_count))
-#
-#    # Disconnect
-#    print("Disconnecting...")
-#    disconnect_future = mqtt_connection.disconnect()
-#    disconnect_future.result()
-#    print("Disconnected!")
+if __name__ == '__main__':
+
+    print("Inside main")
+    mqtt_connection = cmdUtils.build_mqtt_connection(on_connection_interrupted, on_connection_resumed)
+
+    if is_ci == False:
+        print("Connecting to {} with client ID '{}'...".format(
+            cmdUtils.get_command(cmdUtils.m_cmd_endpoint), cmdUtils.get_command("client_id")))
+    else:
+        print("Connecting to endpoint with client ID")
+    connect_future = mqtt_connection.connect()
+
+    # Future.result() waits until a result is available
+    connect_future.result()
+    print("Connected!")
+
+    message_count = cmdUtils.get_command("count")
+    message_topic = cmdUtils.get_command(cmdUtils.m_cmd_topic)
+    message_string = cmdUtils.get_command(cmdUtils.m_cmd_message)
+
+    # Subscribe
+    print("Subscribing to topic '{}'...".format(message_topic))
+    subscribe_future, packet_id = mqtt_connection.subscribe(
+        topic=message_topic,
+        qos=mqtt.QoS.AT_LEAST_ONCE,
+        callback=on_message_received)
+
+    subscribe_result = subscribe_future.result()
+    print("Subscribed with {}".format(str(subscribe_result['qos'])))
+
+    # Publish message to server desired number of times.
+    # This step is skipped if message is blank.
+    # This step loops forever if count was set to 0.
+    if message_string:
+        if message_count == 0:
+            print ("Sending messages until program killed")
+        else:
+            print ("Sending {} message(s)".format(message_count))
+
+        publish_count = 1
+        while (publish_count <= message_count) or (message_count == 0):
+            message = "{} [{}]".format(message_string, publish_count)
+            print("Publishing message to topic '{}': {}".format(message_topic, message))
+            message_json = json.dumps(message)
+            mqtt_connection.publish(
+                topic=message_topic,
+                payload=message_json,
+                qos=mqtt.QoS.AT_LEAST_ONCE)
+            time.sleep(1)
+            publish_count += 1
+
+    # Wait for all messages to be received.
+    # This waits forever if count was set to 0.
+    if message_count != 0 and not received_all_event.is_set():
+        print("Waiting for all messages to be received...")
+
+    received_all_event.wait()
+    print("{} message(s) received.".format(received_count))
+
+    # Disconnect
+    print("Disconnecting...")
+    disconnect_future = mqtt_connection.disconnect()
+    disconnect_future.result()
+    print("Disconnected!")
