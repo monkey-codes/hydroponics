@@ -122,13 +122,13 @@ if __name__ == '__main__':
 #            time.sleep(1)
 #            publish_count += 1
 #
-#    # Wait for all messages to be received.
-#    # This waits forever if count was set to 0.
-#    if message_count != 0 and not received_all_event.is_set():
-#        print("Waiting for all messages to be received...")
-#
-#    received_all_event.wait()
-#    print("{} message(s) received.".format(received_count))
+    # Wait for all messages to be received.
+    # This waits forever if count was set to 0.
+    if message_count != 0 and not received_all_event.is_set():
+        print("Waiting for all messages to be received...")
+
+    received_all_event.wait()
+    print("{} message(s) received.".format(received_count))
 #
 #    # Disconnect
 #    print("Disconnecting...")
