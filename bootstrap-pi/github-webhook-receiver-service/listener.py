@@ -127,6 +127,7 @@ if __name__ == '__main__':
     if message_count != 0 and not received_all_event.is_set():
         print("Waiting for all messages to be received...")
 
+    time.sleep(10)
     received_all_event.wait()
     print("{} message(s) received.".format(received_count))
 #
