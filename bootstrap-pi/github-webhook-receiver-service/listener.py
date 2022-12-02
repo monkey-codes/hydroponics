@@ -82,10 +82,10 @@ if __name__ == '__main__':
     else:
         print("Connecting to endpoint with client ID")
     connect_future = mqtt_connection.connect()
-#
-#    # Future.result() waits until a result is available
-#    connect_future.result()
-#    print("Connected!")
+
+    # Future.result() waits until a result is available
+    connect_future.result()
+    print("Connected!")
 #
 #    message_count = cmdUtils.get_command("count")
 #    message_topic = cmdUtils.get_command(cmdUtils.m_cmd_topic)
