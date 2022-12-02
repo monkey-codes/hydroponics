@@ -42,3 +42,7 @@
       owner: hydro
       group: hydro
 
+  - name: Download AWS root certificate
+    ansible.builtin.get_url:
+      url: https://www.amazontrust.com/repository/AmazonRootCA1.pem
+      dest: /home/hydro/root-CA.crt
