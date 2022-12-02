@@ -74,7 +74,7 @@ print("Script invoked with change {}".format(__name__))
 if __name__ == '__main__':
 
     print("Inside main")
-#    mqtt_connection = cmdUtils.build_mqtt_connection(on_connection_interrupted, on_connection_resumed)
+    mqtt_connection = cmdUtils.build_mqtt_connection(on_connection_interrupted, on_connection_resumed)
 #
 #    if is_ci == False:
 #        print("Connecting to {} with client ID '{}'...".format(
@@ -134,4 +134,4 @@ if __name__ == '__main__':
 #    print("Disconnecting...")
 #    disconnect_future = mqtt_connection.disconnect()
 #    disconnect_future.result()
-#    print("Disconnected!")
+    print("Disconnected!")
