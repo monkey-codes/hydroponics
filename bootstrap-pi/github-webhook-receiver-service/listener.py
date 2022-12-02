@@ -69,6 +69,7 @@ def on_message_received(topic, payload, dup, qos, retain, **kwargs):
     if received_count == cmdUtils.get_command("count"):
         received_all_event.set()
 
+print("Script invoked {}".format(__name__))
 if __name__ == '__main__':
     mqtt_connection = cmdUtils.build_mqtt_connection(on_connection_interrupted, on_connection_resumed)
 
