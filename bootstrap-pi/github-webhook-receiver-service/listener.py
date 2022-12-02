@@ -86,20 +86,20 @@ if __name__ == '__main__':
     # Future.result() waits until a result is available
     connect_future.result()
     print("Connected!")
-#
-#    message_count = cmdUtils.get_command("count")
-#    message_topic = cmdUtils.get_command(cmdUtils.m_cmd_topic)
-#    message_string = cmdUtils.get_command(cmdUtils.m_cmd_message)
-#
-#    # Subscribe
-#    print("Subscribing to topic '{}'...".format(message_topic))
-#    subscribe_future, packet_id = mqtt_connection.subscribe(
-#        topic=message_topic,
-#        qos=mqtt.QoS.AT_LEAST_ONCE,
-#        callback=on_message_received)
-#
-#    subscribe_result = subscribe_future.result()
-#    print("Subscribed with {}".format(str(subscribe_result['qos'])))
+
+    message_count = cmdUtils.get_command("count")
+    message_topic = cmdUtils.get_command(cmdUtils.m_cmd_topic)
+    message_string = cmdUtils.get_command(cmdUtils.m_cmd_message)
+
+    # Subscribe
+    print("Subscribing to topic '{}'...".format(message_topic))
+    subscribe_future, packet_id = mqtt_connection.subscribe(
+        topic=message_topic,
+        qos=mqtt.QoS.AT_LEAST_ONCE,
+        callback=on_message_received)
+
+    subscribe_result = subscribe_future.result()
+    print("Subscribed with {}".format(str(subscribe_result['qos'])))
 #
 #    # Publish message to server desired number of times.
 #    # This step is skipped if message is blank.
