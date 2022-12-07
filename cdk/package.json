@@ -25,6 +25,7 @@
   "dependencies": {
     "@aws-solutions-constructs/aws-apigateway-lambda": "^2.29.0",
     "aws-cdk-lib": "2.53.0",
+    "aws-sdk": "^2.1269.0",
     "cdk-iot-core-certificates": "^1.0.133",
     "constructs": "^10.0.0",
     "source-map-support": "^0.5.21"

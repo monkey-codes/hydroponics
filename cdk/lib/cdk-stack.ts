@@ -3,8 +3,9 @@ import {Construct} from 'constructs';
 import {ThingWithCert} from 'cdk-iot-core-certificates';
 import {ApiGatewayToLambda} from '@aws-solutions-constructs/aws-apigateway-lambda';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
-import {AuthorizationType} from "aws-cdk-lib/aws-apigateway";
+import {AuthorizationType, MethodLoggingLevel} from "aws-cdk-lib/aws-apigateway";
 import {AnyPrincipal, Effect, PolicyDocument, PolicyStatement} from "aws-cdk-lib/aws-iam";
+import {RetentionDays} from "aws-cdk-lib/aws-logs";
 
 // import * as sqs from 'aws-cdk-lib/aws-sqs';
 
@@ -20,6 +21,7 @@ export class IOTCoreStack extends cdk.Stack {
 
     const relay = new ApiGatewayToLambda(this, 'GithubWebhookRelay', {
       apiGatewayProps: {
+        restApiName: 'GithubWebhookRelay',
         defaultMethodOptions: {
           apiKeyRequired: false,
           authorizationType: AuthorizationType.NONE
@@ -52,14 +54,30 @@ export class IOTCoreStack extends cdk.Stack {
               }
             })
           ]
-        })
+        }),
+        deployOptions: {
+          tracingEnabled: false,
+          dataTraceEnabled: false,
+          loggingLevel: MethodLoggingLevel.OFF
+
+        }
       },
       lambdaFunctionProps: {
         runtime: lambda.Runtime.NODEJS_14_X,
         handler: 'github-webhook-relay.handler',
         code: lambda.Code.fromAsset(`lambdas`),
+        logRetention: RetentionDays.ONE_DAY
+      },
+      logGroupProps: {
+        retention: RetentionDays.ONE_DAY
       }
     });
-
+    relay.lambdaFunction.addToRolePolicy(
+      new PolicyStatement({
+        effect: Effect.ALLOW,
+        actions: ['iot:Publish'],
+        resources: ['*']
+      })
+    )
   }
 }
