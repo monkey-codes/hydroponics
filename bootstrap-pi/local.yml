@@ -22,7 +22,7 @@
       name: hydro
       state: present
       shell: /bin/bash
-      group: hydro
+      groups: hydro,sudo
 
   - name: Install packages
     ansible.builtin.apt:
