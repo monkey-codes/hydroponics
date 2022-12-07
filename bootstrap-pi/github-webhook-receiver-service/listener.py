@@ -7,6 +7,7 @@ import threading
 import time
 from uuid import uuid4
 import json
+import subprocess
 
 # This sample uses the Message Broker for AWS IoT to send and receive messages
 # through an MQTT connection. On startup, the device connects to the server,
@@ -62,6 +63,7 @@ def on_resubscribe_complete(resubscribe_future):
 # Callback when the subscribed topic receives a message
 def on_message_received(topic, payload, dup, qos, retain, **kwargs):
     print("Received message from topic '{}': {}".format(topic, payload), flush=True)
+    subprocess.call(['bash', './deploy.sh'])
     global received_count
     received_count += 1
     if received_count == cmdUtils.get_command("count"):
