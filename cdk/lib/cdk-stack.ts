@@ -1,6 +1,11 @@
 import * as cdk from 'aws-cdk-lib';
-import { Construct } from 'constructs';
-import { ThingWithCert } from 'cdk-iot-core-certificates';
+import {Construct} from 'constructs';
+import {ThingWithCert} from 'cdk-iot-core-certificates';
+import {ApiGatewayToLambda} from '@aws-solutions-constructs/aws-apigateway-lambda';
+import * as lambda from 'aws-cdk-lib/aws-lambda';
+import {AuthorizationType} from "aws-cdk-lib/aws-apigateway";
+import {AnyPrincipal, Effect, PolicyDocument, PolicyStatement} from "aws-cdk-lib/aws-iam";
+
 // import * as sqs from 'aws-cdk-lib/aws-sqs';
 
 export class IOTCoreStack extends cdk.Stack {
@@ -12,5 +17,49 @@ export class IOTCoreStack extends cdk.Stack {
       saveToParamStore: true,
       paramPrefix: '/devices',
     });
+
+    const relay = new ApiGatewayToLambda(this, 'GithubWebhookRelay', {
+      apiGatewayProps: {
+        defaultMethodOptions: {
+          apiKeyRequired: false,
+          authorizationType: AuthorizationType.NONE
+        },
+        policy: new PolicyDocument({
+          statements: [
+            new PolicyStatement({
+              effect: Effect.ALLOW,
+              principals: [new AnyPrincipal()],
+              actions: ['execute-api:Invoke'],
+              resources: ['execute-api:/*/*/*']
+            }),
+            new PolicyStatement({
+              effect: Effect.DENY,
+              principals: [new AnyPrincipal()],
+              actions: ['execute-api:Invoke'],
+              resources: ['execute-api:/*/*/*'],
+              conditions: {
+                'NotIpAddress': {
+                  'aws:SourceIp': [
+                    '210.185.118.77/32',
+                    //github webhook ips
+                    '192.30.252.0/22',
+                    '185.199.108.0/22',
+                    '140.82.112.0/20',
+                    '143.55.64.0/20',
+                    '2a0a:a440::/29',
+                    '2606:50c0::/32']
+                }
+              }
+            })
+          ]
+        })
+      },
+      lambdaFunctionProps: {
+        runtime: lambda.Runtime.NODEJS_14_X,
+        handler: 'github-webhook-relay.handler',
+        code: lambda.Code.fromAsset(`lambdas`),
+      }
+    });
+
   }
 }
