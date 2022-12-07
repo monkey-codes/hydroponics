@@ -41,7 +41,12 @@
       dest: /home/hydro/
       owner: hydro
       group: hydro
-
+  - name: Copy ansible config
+    copy:
+      src: hydro-ansible.cfg
+      dest: /home/hydro/.ansible.cfg
+      owner: hydro
+      group: hydro
   - name: Download AWS root certificate
     ansible.builtin.get_url:
       url: https://www.amazontrust.com/repository/AmazonRootCA1.pem
