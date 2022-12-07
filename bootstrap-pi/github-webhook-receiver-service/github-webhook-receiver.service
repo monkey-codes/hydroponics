@@ -8,8 +8,8 @@ Type=simple
 Restart=always
 RestartSec=5
 User=hydro
-ExecStart=/usr/bin/python3 listener.py --endpoint a1jt3uh16ux115-ats.iot.ap-southeast-2.amazonaws.com --ca_file ../root-CA.crt --cert ../cicdtest.cert.pem --key ../cicdtest.private.key --client_id basicPubSub --topic sdk/test/Python --count 0
-#ExecStart=/usr/bin/python3 listener.py
+# ExecStart=/usr/bin/python3 listener.py --endpoint a1jt3uh16ux115-ats.iot.ap-southeast-2.amazonaws.com --ca_file ../root-CA.crt --cert ../cicdtest.cert.pem --key ../cicdtest.private.key --client_id basicPubSub --topic sdk/test/Python --count 0
+ExecStart=/usr/bin/python3 listener.py --endpoint a1jt3uh16ux115-ats.iot.ap-southeast-2.amazonaws.com --ca_file ../root-CA.crt --cert ../hydropi.cert.pem --key ../hydropi.private.key --client_id hydropiCICD --topic webhooks/github/events --count 0
 
 [Install]
 WantedBy=multi-user.target
