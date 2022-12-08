@@ -35,8 +35,6 @@
       group: hydro
   - name: Copy command line utils package
     ansible.builtin.shell: pip install -e /home/hydro/command-line-utils
-      args:
-        executable: /bin/bash
   - name: Copy webhook receiver service
     copy:
       src: github-webhook-receiver-service
