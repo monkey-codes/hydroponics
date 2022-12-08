@@ -24,6 +24,9 @@ cmdUtils.register_command("count", "<int>", "The number of messages to send (opt
 # Needs to be called so the command utils parse the commands
 cmdUtils.get_args()
 
+received_count = 0
+received_all_event = threading.Event()
+
 # Callback when connection is accidentally lost.
 def on_connection_interrupted(connection, error, **kwargs):
     print("Connection interrupted. error: {}".format(error), flush=True)
