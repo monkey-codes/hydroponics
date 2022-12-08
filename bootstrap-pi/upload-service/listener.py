@@ -71,8 +71,9 @@ def listen_for_upload_requests():
       conn, addr = server.accept()
       datagram = conn.recv(4096)
       if datagram:
-        tokens = datagram.strip().split()
+        tokens = datagram.strip().split(":")
         print(datagram, flush=True)
+        print("File: {} Key: {}".format(tokens[0], tokens[1]), flush=True)
       conn.close()
 
 if __name__ == '__main__':
