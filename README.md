@@ -1,9 +1,9 @@
 # PI bootstrap
 
 ```
-$ sudo apt-get update
-$ sudo apt-get install ansible git python3-pip
-$ ansible-pull -U https://github.com/monkey-codes/hydroponics.git -i bootstrap-pi/hosts bootstrap-pi/local.yml
+> sudo apt-get update
+> sudo apt-get install ansible git python3-pip
+> ansible-pull -U https://github.com/monkey-codes/hydroponics.git -i bootstrap-pi/hosts bootstrap-pi/local.yml
 ```
 
 Copy the certificate files for AWS IOT to the device under /home/hydro/
@@ -11,7 +11,7 @@ Copy the certificate files for AWS IOT to the device under /home/hydro/
 To find the endpoint url:
 
 ```
-$ aws iot describe-endpoint --endpoint-type iot:Data-ATS
+> aws iot describe-endpoint --endpoint-type iot:Data-ATS
 ```
 
 ## Useful commands

@@ -21,6 +21,7 @@
       - git
       - python3-pip
       - zip
+      - socat
 
   - name: Install python packages
     ansible.builtin.pip:
