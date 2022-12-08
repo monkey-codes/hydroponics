@@ -8,7 +8,7 @@ import socket
 import os, os.path
 import time
 from collections import deque
-
+import requests
 import command_line_utils;
 # Parse arguments
 cmdUtils = command_line_utils.CommandLineUtils("PubSub - Send and recieve messages through an MQTT connection.")
@@ -57,6 +57,9 @@ def on_resubscribe_complete(resubscribe_future):
 # Callback when the subscribed topic receives a message
 def on_message_received(topic, payload, dup, qos, retain, **kwargs):
     print("Received message from topic '{}': {}".format(topic, payload), flush=True)
+    message = json.loads(payload)
+    if message['type'] == 'response':
+        upload_file(message)
     global received_count
     received_count += 1
     if received_count == cmdUtils.get_command("count"):
@@ -87,6 +90,16 @@ def send_upload_request(mqtt_connection, file, key):
         topic=message_topic,
         payload=json.dumps(request),
         qos=mqtt.QoS.AT_LEAST_ONCE)
+
+def upload(message):
+    file = message['file']
+    url = message['url']
+    data = open(file, 'rb').read()
+    headers = {
+        "Content-Type":"application/binary",
+    }
+    upload = requests.put(url,data=data,headers=headers)
+    print(upload, flush=True)
 
 if __name__ == '__main__':
 

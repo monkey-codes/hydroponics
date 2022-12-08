@@ -2,6 +2,7 @@
 import 'source-map-support/register';
 import * as cdk from 'aws-cdk-lib';
 import { IOTCoreStack } from '../lib/cdk-stack';
+import {IOTUploadStack} from "../lib/iot-upload-stack";
 
 const app = new cdk.App();
 new IOTCoreStack(app, 'CdkStack', {
@@ -19,3 +20,4 @@ new IOTCoreStack(app, 'CdkStack', {
 
   /* For more information, see https://docs.aws.amazon.com/cdk/latest/guide/environments.html */
 });
+new IOTUploadStack(app, 'IOTUploadStack', {})
