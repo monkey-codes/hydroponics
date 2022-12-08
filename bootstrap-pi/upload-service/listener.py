@@ -113,7 +113,7 @@ if __name__ == '__main__':
         print("Waiting for all messages to be received...", flush=True)
 
 
-    listen_for_upload_requests()
+    listen_for_upload_requests(mqtt_connection)
 
     received_all_event.wait()
     print("{} message(s) received.".format(received_count), flush=True)
