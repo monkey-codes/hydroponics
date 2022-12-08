@@ -91,15 +91,13 @@ def send_upload_request(mqtt_connection, file, key):
         payload=json.dumps(request),
         qos=mqtt.QoS.AT_LEAST_ONCE)
 
-def upload(message):
+def upload_file(message):
     file = message['file']
     url = message['url']
     data = open(file, 'rb').read()
-    headers = {
-        "Content-Type":"application/binary",
-    }
+    headers = {}
     upload = requests.put(url,data=data,headers=headers)
-    print(upload, flush=True)
+    print(str(upload.content), flush=True)
 
 if __name__ == '__main__':
 

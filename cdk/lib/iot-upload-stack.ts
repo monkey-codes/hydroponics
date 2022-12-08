@@ -18,7 +18,7 @@ export class IOTUploadStack extends cdk.Stack {
     super(scope, id, props);
 
     const uploadBucket = new Bucket(this, "UploadBucket", {
-      encryption: BucketEncryption.KMS_MANAGED,
+      encryption: BucketEncryption.UNENCRYPTED,
       blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
       bucketName: "hydroponics-iot-upload-bucket",
       versioned: false,

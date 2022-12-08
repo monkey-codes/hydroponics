@@ -14,6 +14,11 @@ To find the endpoint url:
 > aws iot describe-endpoint --endpoint-type iot:Data-ATS
 ```
 
+## Trigger upload
+```
+> echo "/tmp/test:logs/blah" | socat - UNIX-CONNECT:/home/hydro/upload.sock
+```
+
 ## Useful commands
 
 * `npm run build`   compile typescript to js
