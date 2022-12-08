@@ -52,8 +52,8 @@
       owner: hydro
       group: hydro
     loop:
-      - github-webhook-receiver
       - upload
+      - github-webhook-receiver
   - name: Link github webhook receiver systemd service file
     ansible.builtin.file:
       src: "/home/hydro/{{ item }}-service/{{ item }}.service"
@@ -62,22 +62,23 @@
       group: root
       state: link
     loop:
-      - github-webhook-receiver
       - upload
+      - github-webhook-receiver
   - name: Enable github webhook receiver service
     ansible.builtin.systemd:
       name: "{{ item }}.service"
       enabled: yes
     loop:
-      - github-webhook-receiver
       - upload
+      - github-webhook-receiver
   - name: Restart github webhook receiver service and esure config is reloaded
     ansible.builtin.systemd:
       state: restarted
       daemon_reload: yes
       name: "{{ item }}.service"
     loop:
-      - github-webhook-receiver
       - upload
+      - github-webhook-receiver
+
 
 
