@@ -70,10 +70,9 @@ def listen_for_upload_requests():
       server.listen(1)
       conn, addr = server.accept()
       datagram = conn.recv(4096)
-      print(datagram, flush=True)
       if datagram:
         tokens = datagram.strip().split()
-        print(datagram)
+        print(datagram, flush=True)
       conn.close()
 
 if __name__ == '__main__':
