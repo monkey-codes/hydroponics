@@ -33,14 +33,8 @@
       dest: /home/hydro/
       owner: hydro
       group: hydro
-  - name: Copy command line utils package
+  - name: Install command line utils package
     ansible.builtin.shell: pip install -e /home/hydro/command-line-utils
-  - name: Copy webhook receiver service
-    copy:
-      src: github-webhook-receiver-service
-      dest: /home/hydro/
-      owner: hydro
-      group: hydro
   - name: Copy ansible config
     copy:
       src: hydro-ansible.cfg
@@ -51,27 +45,39 @@
     ansible.builtin.get_url:
       url: https://www.amazontrust.com/repository/AmazonRootCA1.pem
       dest: /home/hydro/root-CA.crt
+  - name: Copy webhook receiver service
+    copy:
+      src: "{{ item }}-service"
+      dest: /home/hydro/
+      owner: hydro
+      group: hydro
+    loop:
+      - github-webhook-receiver
+      - upload
   - name: Link github webhook receiver systemd service file
     ansible.builtin.file:
-      src: /home/hydro/github-webhook-receiver-service/github-webhook-receiver.service
-      dest: /etc/systemd/system/github-webhook-receiver.service
+      src: "/home/hydro/{{ item }}-service/{{ item }}.service"
+      dest: "/etc/systemd/system/{{ item }}.service"
       owner: root
       group: root
       state: link
+    loop:
+      - github-webhook-receiver
+      - upload
   - name: Enable github webhook receiver service
     ansible.builtin.systemd:
-      name: github-webhook-receiver.service
+      name: "{{ item }}.service"
       enabled: yes
+    loop:
+      - github-webhook-receiver
+      - upload
   - name: Restart github webhook receiver service and esure config is reloaded
     ansible.builtin.systemd:
       state: restarted
       daemon_reload: yes
-      name: github-webhook-receiver.service
-      #  - name: Copy github webhook receiver systemd service file
-      #    copy:
-      #      src: github-webhook-receiver-service/github-webhook-receiver.service
-      #      dest: /etc/systemd/system/
-      #      owner: hydro
-      #      group: hydro
+      name: "{{ item }}.service"
+    loop:
+      - github-webhook-receiver
+      - upload
 
 
