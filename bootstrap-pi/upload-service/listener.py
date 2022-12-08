@@ -59,7 +59,7 @@ def on_message_received(topic, payload, dup, qos, retain, **kwargs):
     if received_count == cmdUtils.get_command("count"):
         received_all_event.set()
 
-def listen_for_upload_requests():
+def listen_for_upload_requests(mqtt_connection):
     # listen for messages on unix domain socket
     socket_name = "/home/hydro/upload.sock"
     if os.path.exists(socket_name):
@@ -71,10 +71,19 @@ def listen_for_upload_requests():
       conn, addr = server.accept()
       datagram = conn.recv(4096)
       if datagram:
-        tokens = datagram.strip().split(":")
+        tokens = datagram.decode().strip().split(":")
         print(datagram, flush=True)
         print("File: {} Key: {}".format(tokens[0], tokens[1]), flush=True)
+        send_upload_request(mqtt_connection, tokens[0], tokens[1])
       conn.close()
+
+def send_upload_request(mqtt_connection, file, key):
+    request = {"type": "request", "file": file, "key": key}
+    message_topic = cmdUtils.get_command(cmdUtils.m_cmd_topic)
+    mqtt_connection.publish(
+        topic=message_topic,
+        payload=json.dumps(request),
+        qos=mqtt.QoS.AT_LEAST_ONCE)
 
 if __name__ == '__main__':
 
