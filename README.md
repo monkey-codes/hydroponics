@@ -5,6 +5,14 @@
 > sudo apt-get install ansible git python3-pip
 > ansible-pull -U https://github.com/monkey-codes/hydroponics.git -i bootstrap-pi/hosts bootstrap-pi/local.yml
 ```
+
+After bootstrap, sudo to allow members of sudo group to sudo without
+password.
+```
+> EDITOR=vi visudo
+```
+change `%sudo   ALL=(ALL:ALL) ALL` to `%sudo   ALL=(ALL:ALL) NOPASSWD: ALL`
+
 # View service logs
 ```
 > journalctl -u github-webhook-receiver -f
