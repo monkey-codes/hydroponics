@@ -23,6 +23,7 @@
       - zip
       - socat
       - fswebcam
+      - v4l-utils
 
   - name: Install python packages
     ansible.builtin.pip:
