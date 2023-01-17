@@ -5,6 +5,26 @@
 > sudo apt-get install ansible git python3-pip
 > ansible-pull -U https://github.com/monkey-codes/hydroponics.git -i bootstrap-pi/hosts bootstrap-pi/local.yml
 ```
+# Testing using VirtualBox/Vagrant
+
+## Create a virtual webcam
+```
+> sudo apt-get -y install v4l2loopback-dkms
+> sudo modprobe v4l2loopback devices=1 video_nr=1 card_label='MyWebCam'
+#/dev/video1
+```
+# View service logs
+```
+> journalctl -u github-webhook-receiver -f
+# OR
+> journalctl -u upload -f
+```
+
+# Restart service
+
+```
+> systemctl restart upload.service
+```
 
 Copy the certificate files for AWS IOT to the device under /home/hydro/
 

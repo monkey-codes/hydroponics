@@ -22,6 +22,7 @@
       - python3-pip
       - zip
       - socat
+      - fswebcam
 
   - name: Install python packages
     ansible.builtin.pip:
