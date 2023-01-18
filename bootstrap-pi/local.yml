@@ -83,7 +83,7 @@
       - github-webhook-receiver
   - name: Copy photos script
     copy:
-      src: "photos"
+      src: photos
       dest: /home/hydro/
       owner: hydro
       group: hydro
