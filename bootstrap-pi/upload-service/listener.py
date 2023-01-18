@@ -77,7 +77,7 @@ def listen_for_upload_requests(mqtt_connection):
       conn, addr = server.accept()
       datagram = conn.recv(4096)
       if datagram:
-        tokens = datagram.decode().strip().split(":")
+        tokens = datagram.decode().strip().split("|")
         print(datagram, flush=True)
         print("File: {} Key: {}".format(tokens[0], tokens[1]), flush=True)
         send_upload_request(mqtt_connection, tokens[0], tokens[1])

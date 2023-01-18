@@ -36,7 +36,7 @@ To find the endpoint url:
 
 ## Trigger upload
 ```
-> echo "/tmp/test:logs/blah" | socat - UNIX-CONNECT:/home/hydro/upload.sock
+> echo "/tmp/test|logs/blah" | socat - UNIX-CONNECT:/home/hydro/upload.sock
 ```
 # Testing using VirtualBox/Vagrant
 

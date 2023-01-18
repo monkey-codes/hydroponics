@@ -14,6 +14,6 @@ for CAMERA in /dev/video*; do
 	if test -f "$FILE_PATH"; then
         UPLOAD_PATH=$DEVICE_ID/photos/$CAMERA_ID/$FILE_NAME
 	    echo "uploading $FILE_PATH to $UPLOAD_PATH"
-   	    echo "$FILE_PATH:$UPLOAD_PATH" | socat - UNIX-CONNECT:/home/hydro/upload.sock
+   	    echo "$FILE_PATH|$UPLOAD_PATH" | socat - UNIX-CONNECT:/home/hydro/upload.sock
 	fi
 done
