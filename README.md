@@ -40,6 +40,21 @@ To find the endpoint url:
 ```
 # Testing using VirtualBox/Vagrant
 
+## Setup vm
+
+Install virtualbox and vagrant. In a new directory create a `Vagrantfile`
+```
+Vagrant.configure("2") do |config|
+  config.vm.box = "debian/bullseye64"
+
+ config.vm.provider "virtualbox" do |vb|
+    vb.memory = "1024"
+  end
+
+end
+```
+Then run `vagrant up` & `vagrant ssh` to get a shell on the vm
+
 ## Create a virtual webcam
 ```
 > sudo apt-get -y install v4l2loopback-dkms
