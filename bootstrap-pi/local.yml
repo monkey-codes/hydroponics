@@ -24,7 +24,12 @@
       - socat
       - fswebcam
       - v4l-utils
-
+  - name: Copy photos script
+    copy:
+      src: photos
+      dest: /home/hydro/
+      owner: hydro
+      group: hydro
   - name: Install python packages
     ansible.builtin.pip:
       name:
@@ -73,6 +78,7 @@
     loop:
       - upload
       - github-webhook-receiver
+# This should be the last step, it will restart the process that is running ansible, any steps after this won't execute.
   - name: Restart github webhook receiver service and esure config is reloaded
     ansible.builtin.systemd:
       state: restarted
@@ -81,9 +87,3 @@
     loop:
       - upload
       - github-webhook-receiver
-  - name: Copy photos script
-    copy:
-      src: photos
-      dest: /home/hydro/
-      owner: hydro
-      group: hydro
