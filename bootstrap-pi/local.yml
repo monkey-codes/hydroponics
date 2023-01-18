@@ -30,6 +30,8 @@
       dest: /home/hydro/
       owner: hydro
       group: hydro
+  - name: Make takephoto.sh script executable
+    file: dest=/home/hydro/photos/takephoto.sh mode=a+x
   - name: Install python packages
     ansible.builtin.pip:
       name:
