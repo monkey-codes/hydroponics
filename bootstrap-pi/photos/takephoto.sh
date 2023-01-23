@@ -1,7 +1,7 @@
 #!/bin/bash
 
 DEVICE_ID=`cat /sys/class/net/eth0/address`
-MIN_FILE_SIZE=500k
+MIN_FILE_SIZE=-500k
 
 for CAMERA in /dev/video*; do
 	CAMERA_ID="${CAMERA/\/dev\//}"
