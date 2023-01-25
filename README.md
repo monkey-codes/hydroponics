@@ -69,6 +69,35 @@ Then run `vagrant up` & `vagrant ssh` to get a shell on the vm
 ```
 
 
+# Creating Users
+The intention is to restrict api access to only manually created users, no public sign-up is supported.
+
+Manually create a user in aws console using cognito. This will require a password reset. To do a login call the initiate auth api
+```
+> POST / HTTP/2
+> Host: cognito-idp.ap-southeast-2.amazonaws.com
+> content-type: application/x-amz-json-1.1
+> x-amz-target: AWSCognitoIdentityProviderService.InitiateAuth
+ {
+    "AuthParameters" : {
+       "USERNAME" : "user",
+       "PASSWORD" : "*****"
+    },
+    "AuthFlow" : "USER_PASSWORD_AUTH",
+    "ClientId" : "xxxxxxxxxx"
+ }
+
+``` 
+The first time the api will respond with a `NEW_PASSWORD_REQUIRED` challenage. Use aws-cli to respond to the challenge:
+
+```
+aws cognito-idp respond-to-auth-challenge --client-id xxxxx --challenge-name NEW_PASSWORD_REQUIRED --challenge-responses USERNAME=monkey,NEW_PASSWORD="***" --session "xxxx"
+```
+
+After a password reset the initiate auth endpoing will return `IdToken`, `AccessToken` and a `RefreshToken`
+
+At the time of writing custom scopes was only available through hosted ui / oauth2 endpoints and not via InitiateAuth api.
+
 ## Useful commands
 
 * `npm run build`   compile typescript to js
