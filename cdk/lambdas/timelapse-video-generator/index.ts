@@ -39,6 +39,7 @@ export const handler = async (
 };
 
 function ffmpegSync(): Promise<{}> {
+  //TODO: Test this -> ffmpeg -y -pattern_type glob -i './video0/*.jpg' -vcodec libx264 -b:v 8500k -c:v h264_videotoolbox  -vf "setpts=2.0*PTS" /tmp/video.mp4
   return new Promise((resolve, reject) => {
     Ffmpeg("/tmp/*.jpg")
       .addInputOption("-y", "-pattern_type", "glob")
