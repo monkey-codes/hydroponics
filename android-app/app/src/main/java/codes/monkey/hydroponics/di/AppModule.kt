@@ -1,11 +1,17 @@
 package codes.monkey.hydroponics.di
 
+import android.content.Context
 import android.util.Log
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
 import codes.monkey.hydroponics.network.AuthAPI
 import codes.monkey.hydroponics.repository.AuthenticationRepository
+import codes.monkey.hydroponics.repository.TokenManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -14,13 +20,19 @@ import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 
+val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "data_store")
+
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
     @Singleton
     @Provides
-    fun provideAuthenticationRepository(api: AuthAPI) = AuthenticationRepository(api)
+    fun provideTokenManager(@ApplicationContext context: Context): TokenManager = TokenManager(context)
+
+    @Singleton
+    @Provides
+    fun provideAuthenticationRepository(api: AuthAPI, tokenManager: TokenManager) = AuthenticationRepository(api, tokenManager)
 
     @Singleton
     @Provides

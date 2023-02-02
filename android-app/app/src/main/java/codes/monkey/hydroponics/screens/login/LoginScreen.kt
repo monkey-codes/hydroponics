@@ -1,5 +1,6 @@
 package codes.monkey.hydroponics.screens.login
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -8,6 +9,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -27,16 +29,22 @@ import codes.monkey.hydroponics.navigation.AppScreens
 
 @Composable
 fun LoginScreen(navController: NavHostController,
-                viewModel: LoginScreenViewModel = hiltViewModel()
-) {
+                viewModel: LoginScreenViewModel = hiltViewModel(),
+                tokenViewModel: TokenViewModel  = hiltViewModel()
 
+
+) {
     Surface(modifier = Modifier.fillMaxSize()) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            LoginForm(loading = viewModel.loading.value ?: false) { email, password ->
+//            val loading = viewModel.loading.observeAsState(initial = false)
+            val loading = viewModel.loading.value
+            Log.i("LOGIN", "loading state $loading")
+            LoginForm(loading = loading) { email, password ->
                 viewModel.login(email, password) {
+                    tokenViewModel.saveTokens(it.value.result?.authenticationResult!!)
                     navController.navigate(AppScreens.HomeScreen.name)
                 }
             }

@@ -19,12 +19,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import codes.monkey.hydroponics.navigation.AppScreens
+import codes.monkey.hydroponics.screens.login.TokenViewModel
 import kotlinx.coroutines.delay
 
 @Composable
-fun SplashScreen(navController: NavHostController) {
+fun SplashScreen(navController: NavHostController,
+                 tokenViewModel: TokenViewModel = hiltViewModel()
+) {
     val scale = remember {
         Animatable(0f)
     }
@@ -35,7 +39,10 @@ fun SplashScreen(navController: NavHostController) {
             }
         ))
         delay(2000L)
-        navController.navigate(AppScreens.LoginScreen.name)
+        if(tokenViewModel.accessToken.value == null)
+            navController.navigate(AppScreens.LoginScreen.name)
+        else
+            navController.navigate(AppScreens.HomeScreen.name)
     }
     Surface(
         modifier = Modifier
