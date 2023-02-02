@@ -8,10 +8,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -24,27 +21,27 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import codes.monkey.hydroponics.components.EmailInput
+import codes.monkey.hydroponics.components.ErrorFeedback
 import codes.monkey.hydroponics.components.PasswordInput
 import codes.monkey.hydroponics.navigation.AppScreens
 
 @Composable
-fun LoginScreen(navController: NavHostController,
-                viewModel: LoginScreenViewModel = hiltViewModel(),
-                tokenViewModel: TokenViewModel  = hiltViewModel()
-
-
+fun LoginScreen(
+    navController: NavHostController,
+    viewModel: LoginScreenViewModel = hiltViewModel(),
 ) {
+
+    ErrorFeedback(viewModel.authState)
+
     Surface(modifier = Modifier.fillMaxSize()) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-//            val loading = viewModel.loading.observeAsState(initial = false)
-            val loading = viewModel.loading.value
+            val loading = viewModel.loading.collectAsState(initial = false)
             Log.i("LOGIN", "loading state $loading")
-            LoginForm(loading = loading) { email, password ->
+            LoginForm(loading = loading.value) { email, password ->
                 viewModel.login(email, password) {
-                    tokenViewModel.saveTokens(it.value.result?.authenticationResult!!)
                     navController.navigate(AppScreens.HomeScreen.name)
                 }
             }
@@ -57,7 +54,7 @@ fun LoginScreen(navController: NavHostController,
 @Composable
 fun LoginForm(
     loading: Boolean = false,
-    onDone: (String, String) -> Unit = { _, _  ->}
+    onDone: (String, String) -> Unit = { _, _ -> }
 ) {
     val email = rememberSaveable() { mutableStateOf("") }
     val password = rememberSaveable() { mutableStateOf("") }
@@ -96,10 +93,12 @@ fun LoginForm(
 }
 
 @Composable
-fun SubmitButton(textId: String,
-                 loading: Boolean,
-                 validInputs: Boolean,
-                 onClick: () -> Unit) {
+fun SubmitButton(
+    textId: String,
+    loading: Boolean,
+    validInputs: Boolean,
+    onClick: () -> Unit
+) {
     Button(
         onClick = onClick,
         modifier = Modifier

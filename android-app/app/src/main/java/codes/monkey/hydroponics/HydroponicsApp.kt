@@ -7,7 +7,7 @@ import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
 
 @HiltAndroidApp
-class HydroponicsApp: Application(), Configuration.Provider {
+class HydroponicsApp : Application(), Configuration.Provider {
     @Inject
     lateinit var workerFactory: HiltWorkerFactory
     override fun getWorkManagerConfiguration(): Configuration =

@@ -7,7 +7,7 @@ enum class AppScreens {
 
     companion object {
         fun fromRoute(route: String?): AppScreens =
-            when(route?.substringBefore("/")) {
+            when (route?.substringBefore("/")) {
                 SplashScreen.name -> SplashScreen
                 LoginScreen.name -> LoginScreen
                 HomeScreen.name -> HomeScreen
