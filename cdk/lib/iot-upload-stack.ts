@@ -7,14 +7,17 @@ import {
   BlockPublicAccess,
   Bucket,
   BucketEncryption,
+  EventType,
 } from "aws-cdk-lib/aws-s3";
-import { StorageClass } from "aws-cdk-lib/aws-s3/lib/rule";
 import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { Duration, Size } from "aws-cdk-lib";
+import { Topic } from "aws-cdk-lib/aws-sns";
+import { SnsDestination } from "aws-cdk-lib/aws-s3-notifications";
 
 // import * as sqs from 'aws-cdk-lib/aws-sqs';
 
 export class IOTUploadStack extends cdk.Stack {
+  public readonly s3Topic: Topic;
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
@@ -35,6 +38,15 @@ export class IOTUploadStack extends cdk.Stack {
       //   },
       // ],
     });
+    const topic = new Topic(this, "S3EventTopic", {
+      topicName: "S3EventTopic",
+      displayName: "S3EventTopic",
+    });
+    uploadBucket.addEventNotification(
+      EventType.OBJECT_CREATED,
+      new SnsDestination(topic)
+    );
+    this.s3Topic = topic
     const iotToLambda = new IotToLambda(this, "upload_generator", {
       lambdaFunctionProps: {
         code: lambda.Code.fromAsset(`lambdas`),
