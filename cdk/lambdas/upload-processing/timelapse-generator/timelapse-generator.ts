@@ -1,4 +1,4 @@
-import { Context } from "aws-lambda";
+import { Context, SQSEvent } from "aws-lambda";
 import * as Ffmpeg from "fluent-ffmpeg";
 import { S3 } from "aws-sdk";
 import {
@@ -9,32 +9,35 @@ import {
 import { promisify } from "util";
 import { writeFile, readdirSync, createReadStream } from "fs";
 
-export const handler = async (
-  event: { key: string; file: string },
-  context: Context
-) => {
+export const handler = async (event: SQSEvent, context: Context) => {
+  console.log(event);
   const bucketName = process.env.BUCKET_NAME;
   console.log("Lambda triggered", bucketName);
   const s3 = new S3();
-  await downloadImages(s3, <ListObjectsRequest>{
-    Bucket: bucketName,
-    Prefix: "b8:27:eb:66:03:0b/photos/video0/",
-  });
-
-  await ffmpegSync();
-  // readdirSync("/tmp").forEach((file) => {
-  //   if (file.endsWith(".mp4")) {
-  //     console.log(file);
-  //   }
-  // });
-  const stream = createReadStream(`/tmp/video.mp4`);
-  await s3
-    .putObject(<PutObjectRequest>{
+  for (const record of event.Records) {
+    const body: { prefix: string } = JSON.parse(record.body);
+    console.log(`Handling ${body.prefix}`);
+    await downloadImages(s3, <ListObjectsRequest>{
       Bucket: bucketName,
-      Key: `b8:27:eb:66:03:0b/photos/video0/video.mp4`,
-      Body: createReadStream("/tmp/video.mp4"),
-    })
-    .promise();
+      Prefix: body.prefix,
+    });
+
+    await ffmpegSync();
+    // readdirSync("/tmp").forEach((file) => {
+    //   if (file.endsWith(".mp4")) {
+    //     console.log(file);
+    //   }
+    // });
+    const stream = createReadStream(`/tmp/video.mp4`);
+    await s3
+      .putObject(<PutObjectRequest>{
+        Bucket: bucketName,
+        Key: `${body.prefix}/video.mp4`,
+        Body: createReadStream("/tmp/video.mp4"),
+      })
+      .promise();
+  }
+
   console.log("Lambda done");
 };
 
@@ -45,8 +48,10 @@ function ffmpegSync(): Promise<{}> {
       .addInputOption("-y", "-pattern_type", "glob")
       .videoCodec("libx264")
       .videoBitrate("1024k")
-      .size("1920x1080")
       .addOutputOption("-pix_fmt", "yuv420p")
+      //.addOutputOption("-vf", "setpts=2.0*PTS")
+      .addOutputOption("-vf", "scale=640:360")
+      .addOutputOption("-r", "30")
       .on("progress", (progress) =>
         console.log(
           `Processing frames: ${progress.frames} currentFps: ${progress.currentFps}` +

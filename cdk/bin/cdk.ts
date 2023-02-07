@@ -28,9 +28,13 @@ const uploadProcessingStack = new UploadProcessingStack(
   {
     uploadBucketTopic: uploadStack.s3Topic,
     dynamoDBTable: dynamodbStack.dynamoDBTable,
+    uploadBucketName: uploadStack.uploadBucketName,
+    uploadBucketArn: uploadStack.uploadBucketArn
   }
 );
 
 new APIStack(app, "APIStack", {
   dynamoDBTable: dynamodbStack.dynamoDBTable,
+  uploadBucketName: uploadStack.uploadBucketName,
+  uploadBucketArn: uploadStack.uploadBucketArn
 });

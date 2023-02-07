@@ -106,3 +106,8 @@ At the time of writing custom scopes was only available through hosted ui / oaut
 * `cdk deploy`      deploy this stack to your default AWS account/region
 * `cdk diff`        compare deployed stack with current state
 * `cdk synth`       emits the synthesized CloudFormation template
+
+
+## Lambdas
+
+* Manually run npm install (node 16) in lambda folders that contain a package.json. TODO figure out if there is a way to automate this through cdk

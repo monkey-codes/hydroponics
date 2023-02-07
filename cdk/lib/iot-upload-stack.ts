@@ -18,6 +18,9 @@ import { SnsDestination } from "aws-cdk-lib/aws-s3-notifications";
 
 export class IOTUploadStack extends cdk.Stack {
   public readonly s3Topic: Topic;
+  public readonly uploadBucketName: string;
+  public readonly uploadBucketArn: string;
+  // public readonly uploadBucket: Bucket;
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
@@ -46,7 +49,10 @@ export class IOTUploadStack extends cdk.Stack {
       EventType.OBJECT_CREATED,
       new SnsDestination(topic)
     );
-    this.s3Topic = topic
+    this.s3Topic = topic;
+    this.uploadBucketName = uploadBucket.bucketName;
+    this.uploadBucketArn = uploadBucket.bucketArn;
+    // this.uploadBucket = uploadBucket;
     const iotToLambda = new IotToLambda(this, "upload_generator", {
       lambdaFunctionProps: {
         code: lambda.Code.fromAsset(`lambdas`),
@@ -80,40 +86,6 @@ export class IOTUploadStack extends cdk.Stack {
         resources: [
           `arn:aws:iot:ap-southeast-2:${this.account}:topic/upload/requests`,
         ],
-      })
-    );
-    
-    const ffmegLayer = new lambda.LayerVersion(this, 'ffmpeg-layer', {
-      layerVersionName: 'ffmpeg',
-      compatibleRuntimes: [lambda.Runtime.NODEJS_14_X],
-      code: lambda.AssetCode.fromAsset('lambda-layers/ffmpeg')
-    });
-
-    const timelapseLambda = new lambda.Function(this, "timelapse_generator", {
-      code: new lambda.AssetCode("lambdas/timelapse-video-generator"),
-      handler: "index.handler",
-      runtime: lambda.Runtime.NODEJS_14_X,
-      logRetention: RetentionDays.ONE_DAY,
-      timeout: Duration.seconds(240),
-      memorySize: 2048,
-      ephemeralStorageSize: Size.gibibytes(10),
-      layers: [ffmegLayer],
-      environment: {
-        BUCKET_NAME: uploadBucket.bucketName,
-      },
-    });
-    timelapseLambda.addToRolePolicy(
-      new PolicyStatement({
-        effect: Effect.ALLOW,
-        actions: ["s3:PutObject", "s3:GetObject"],
-        resources: [`${uploadBucket.bucketArn}/*`],
-      })
-    );
-    timelapseLambda.addToRolePolicy(
-      new PolicyStatement({
-        effect: Effect.ALLOW,
-        actions: ["s3:ListBucket"],
-        resources: [uploadBucket.bucketArn],
       })
     );
   }
