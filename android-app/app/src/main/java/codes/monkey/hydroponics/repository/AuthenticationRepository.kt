@@ -14,6 +14,7 @@ class AuthenticationRepository @Inject constructor(
 ) {
 
     val loggedIn = tokenManager.loggedIn
+
     fun login(email: String, password: String) = apiRequestFlow {
         val response = authApi.login(
             LoginRequest(

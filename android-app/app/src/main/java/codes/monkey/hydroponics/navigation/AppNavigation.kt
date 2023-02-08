@@ -5,9 +5,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import codes.monkey.hydroponics.components.AutoLogoutNavigation
+import codes.monkey.hydroponics.components.ScreenScaffold
 import codes.monkey.hydroponics.screens.SplashScreen
 import codes.monkey.hydroponics.screens.home.HomeScreen
 import codes.monkey.hydroponics.screens.login.LoginScreen
+import codes.monkey.hydroponics.screens.videoplayer.VideoPlayerScreen
 
 @Composable
 fun AppNavigation() {
@@ -23,8 +25,17 @@ fun AppNavigation() {
         }
         composable(AppScreens.HomeScreen.name) {
             AutoLogoutNavigation(navController = navController) {
-                HomeScreen(navController = navController)
+                ScreenScaffold(navController = navController) {
+                    HomeScreen(navController = navController)
+                }
             }
+        }
+        composable(AppScreens.VideoPlayerScreen.name+"/{url}") {
+//            AutoLogoutNavigation(navController = navController) {
+//                ScreenScaffold(navController = navController) {
+                    VideoPlayerScreen(navController = navController, url = it.arguments?.getString("url"))
+//                }
+//            }
         }
     }
 

@@ -62,6 +62,7 @@ async function writeDevicesCollection(keys: Set<string>) {
             pk: { S: `devices#${deviceId}` },
             sk: { S: `cameras#${cameraId}` },
             id: { S: cameraId },
+            deviceId: { S: deviceId },
             created: { N: created }
         })
         console.log("done writing to dynamodb");

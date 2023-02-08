@@ -3,7 +3,8 @@ package codes.monkey.hydroponics.navigation
 enum class AppScreens {
     SplashScreen,
     LoginScreen,
-    HomeScreen;
+    HomeScreen,
+    VideoPlayerScreen;
 
     companion object {
         fun fromRoute(route: String?): AppScreens =

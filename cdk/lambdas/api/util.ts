@@ -1,20 +1,25 @@
 import { APIGatewayProxyResultV2 } from "aws-lambda";
 import { DynamoDB } from "aws-sdk";
+import { DocumentClient } from "aws-sdk/clients/dynamodb";
 const tableName = process.env.TABLE_NAME;
 export const query = async (
-  dynamoDB: DynamoDB,
+  documentClient: DocumentClient,
   pk: string,
   sk: string,
   expectOne: boolean = false
 ): Promise<APIGatewayProxyResultV2> => {
   try {
-    const result = await dynamoDB
+    const result = await documentClient
       .query(<DynamoDB.Types.QueryInput>{
         TableName: tableName,
-        KeyConditionExpression: `pk = :pk and begins_with(sk, :sk)`,
+        KeyConditionExpression: `#pk = :pk and begins_with(#sk, :sk)`,
+        ExpressionAttributeNames: {
+          "#pk": "pk",
+          "#sk": "sk",
+        },
         ExpressionAttributeValues: {
-          ":pk": { S: pk },
-          ":sk": { S: sk },
+          ":pk": pk,
+          ":sk": sk,
         },
       })
       .promise();
@@ -44,10 +49,5 @@ export const query = async (
 };
 
 function mapToApiOutput(item: DynamoDB.AttributeMap): any {
-  return Object.keys(item)
-    .filter((key) => !["pk", "sk"].includes(key))
-    .reduce((current: any, key) => {
-      current[key] = item[key].S || item[key].N;
-      return current;
-    }, {});
+  return item;
 }
