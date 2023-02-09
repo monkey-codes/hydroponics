@@ -111,3 +111,17 @@ At the time of writing custom scopes was only available through hosted ui / oaut
 ## Lambdas
 
 * Manually run npm install (node 16) in lambda folders that contain a package.json. TODO figure out if there is a way to automate this through cdk
+
+#Android
+
+List devices (emulators and physical)
+
+```
+> adb devices -l
+```
+
+Install an apk on a (physical) device
+
+```
+> adb -s IVGUWGWWAQF6QK79 install ./app-debug.apk
+```

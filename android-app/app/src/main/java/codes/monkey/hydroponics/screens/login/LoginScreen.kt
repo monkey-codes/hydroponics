@@ -4,7 +4,8 @@ import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
@@ -20,6 +21,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import codes.monkey.hydroponics.components.Constants.CORNER_SIZE
+import codes.monkey.hydroponics.components.Constants.GUTTER_PADDING
 import codes.monkey.hydroponics.components.EmailInput
 import codes.monkey.hydroponics.components.ErrorFeedback
 import codes.monkey.hydroponics.components.PasswordInput
@@ -68,8 +71,10 @@ fun LoginForm(
         .height(250.dp)
         .background(MaterialTheme.colorScheme.background)
         .verticalScroll(rememberScrollState())
+        .padding(GUTTER_PADDING.dp)
     Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
         EmailInput(
+            modifier = Modifier.padding(GUTTER_PADDING.dp),
             emailState = email,
             enabled = !loading,
             onAction = KeyboardActions {
@@ -77,7 +82,9 @@ fun LoginForm(
             }
         )
         PasswordInput(
-            modifier = Modifier.focusRequester(passwordFocusRequest),
+            modifier = Modifier
+                .focusRequester(passwordFocusRequest)
+                .padding(GUTTER_PADDING.dp),
             passwordState = password,
             enabled = !loading,
             passwordVisibility = passwordVisibility,
@@ -102,10 +109,10 @@ fun SubmitButton(
     Button(
         onClick = onClick,
         modifier = Modifier
-//            .padding(3.dp)
+            .padding(GUTTER_PADDING.dp)
             .fillMaxWidth(),
         enabled = !loading && validInputs,
-        shape = CircleShape
+        shape = RoundedCornerShape(corner = CornerSize(CORNER_SIZE.dp))
     ) {
         if (loading) CircularProgressIndicator(modifier = Modifier.size(25.dp))
         else Text(text = textId, modifier = Modifier.padding(5.dp))

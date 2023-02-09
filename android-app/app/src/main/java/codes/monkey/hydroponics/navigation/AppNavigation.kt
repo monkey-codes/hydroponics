@@ -25,7 +25,7 @@ fun AppNavigation() {
         }
         composable(AppScreens.HomeScreen.name) {
             AutoLogoutNavigation(navController = navController) {
-                ScreenScaffold(navController = navController) {
+                ScreenScaffold(navController = navController, title = "Timelapse Videos") {
                     HomeScreen(navController = navController)
                 }
             }
@@ -33,7 +33,7 @@ fun AppNavigation() {
         composable(AppScreens.VideoPlayerScreen.name+"/{url}") {
 //            AutoLogoutNavigation(navController = navController) {
 //                ScreenScaffold(navController = navController) {
-                    VideoPlayerScreen(navController = navController, url = it.arguments?.getString("url"))
+                    VideoPlayerScreen(url = it.arguments?.getString("url"))
 //                }
 //            }
         }

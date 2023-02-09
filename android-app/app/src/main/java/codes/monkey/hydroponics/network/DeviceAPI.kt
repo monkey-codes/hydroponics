@@ -4,7 +4,6 @@ import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
-import java.time.Instant
 import javax.inject.Singleton
 
 data class HelloResponse(val message: String)
