@@ -47,12 +47,12 @@
       dest: /home/hydro/
       owner: hydro
       group: hydro
-  - name: Measure sensors 5 minutes
-    ansible.builtin.cron:
-      name: "Sensor measurement every 5 minutes"
-      minute: "*/5"
-      job: "cd /home/hydro/sensors && /usr/bin/python3 measure.py --endpoint a1jt3uh16ux115-ats.iot.ap-southeast-2.amazonaws.com --ca_file ../root-CA.crt --cert ../hydropi.cert.pem --key ../hydropi.private.key --client_id hydropiSensors --topic device/sensordata  > /dev/null 2>&1"
-      user: hydro
+  # - name: Measure sensors 5 minutes
+  #   ansible.builtin.cron:
+  #     name: "Sensor measurement every 5 minutes"
+  #     minute: "*/5"
+  #     job: "cd /home/hydro/sensors && /usr/bin/python3 measure.py --endpoint a1jt3uh16ux115-ats.iot.ap-southeast-2.amazonaws.com --ca_file ../root-CA.crt --cert ../hydropi.cert.pem --key ../hydropi.private.key --client_id hydropiSensors --topic device/sensordata  > /dev/null 2>&1"
+  #     user: hydro
   
   - name: Install python packages
     ansible.builtin.pip:
