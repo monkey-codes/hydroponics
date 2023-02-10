@@ -45,6 +45,7 @@
     ansible.builtin.pip:
       name:
         - awsiotsdk
+        - psutil
   - name: Copy command line utils package
     copy:
       src: command-line-utils
