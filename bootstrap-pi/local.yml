@@ -53,7 +53,7 @@
       minute: "*/5"
       job: "cd /home/hydro/sensors && /usr/bin/python3 measure.py --endpoint a1jt3uh16ux115-ats.iot.ap-southeast-2.amazonaws.com --ca_file ../root-CA.crt --cert ../hydropi.cert.pem --key ../hydropi.private.key --client_id hydropiSensors --topic device/sensordata  > /dev/null 2>&1"
       user: hydro
-      state : absent
+      state : present
   
   - name: Install python packages
     ansible.builtin.pip:
