@@ -3,6 +3,7 @@ package codes.monkey.hydroponics.screens
 import android.view.animation.OvershootInterpolator
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
@@ -47,7 +48,8 @@ fun SplashScreen(
             .size(330.dp)
             .scale(scale.value),
         shape = CircleShape,
-        color = MaterialTheme.colorScheme.primaryContainer
+        color = MaterialTheme.colorScheme.background,
+        border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.primary )
     ) {
         Column(
             modifier = Modifier.padding(1.dp),

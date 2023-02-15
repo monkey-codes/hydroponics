@@ -144,7 +144,7 @@ fun HydroponicsAppTheme(
             ?: throw Exception("Not in an activity - unable to get Window reference")
 
         SideEffect {
-            (view.context as Activity).window.statusBarColor = colorScheme.primaryContainer.toArgb()
+            (view.context as Activity).window.statusBarColor = colorScheme.background.toArgb()
             WindowCompat.getInsetsController(currentWindow, view).isAppearanceLightStatusBars =
                 darkTheme
         }

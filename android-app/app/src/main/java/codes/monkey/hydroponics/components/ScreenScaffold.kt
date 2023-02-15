@@ -63,8 +63,8 @@ fun ScreenScaffoldContainer(
         drawerState = drawerState,
         drawerContent = {
             ModalDrawerSheet(
-                drawerContainerColor = MaterialTheme.colorScheme.secondaryContainer,
-                drawerContentColor = MaterialTheme.colorScheme.onSecondaryContainer
+                drawerContainerColor = MaterialTheme.colorScheme.surface,
+                drawerContentColor = MaterialTheme.colorScheme.onSurface
             ) {
                 Spacer(Modifier.height(20.dp))
                 Text(modifier = Modifier.padding(start = 30.dp, bottom = GUTTER_PADDING.dp),
@@ -110,7 +110,7 @@ fun ScreenScaffoldContainer(
                         }
                     },
                     colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = MaterialTheme.colorScheme.primaryContainer,
+                        containerColor = MaterialTheme.colorScheme.background,
                         titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
                     )
 
