@@ -6,6 +6,7 @@ import { IOTUploadStack } from "../lib/iot-upload-stack";
 import { APIStack } from "../lib/api-stack";
 import { UploadProcessingStack } from "../lib/upload-processing/upload-processing-stack";
 import { DynamoDBStack } from "../lib/dynamodb-stack";
+import { SensorDataStack } from "../lib/sensor-data/sensor-data-stack";
 
 const app = new cdk.App();
 new IOTCoreStack(app, "CdkStack", {
@@ -29,12 +30,17 @@ const uploadProcessingStack = new UploadProcessingStack(
     uploadBucketTopic: uploadStack.s3Topic,
     dynamoDBTable: dynamodbStack.dynamoDBTable,
     uploadBucketName: uploadStack.uploadBucketName,
-    uploadBucketArn: uploadStack.uploadBucketArn
+    uploadBucketArn: uploadStack.uploadBucketArn,
   }
 );
 
 new APIStack(app, "APIStack", {
   dynamoDBTable: dynamodbStack.dynamoDBTable,
   uploadBucketName: uploadStack.uploadBucketName,
-  uploadBucketArn: uploadStack.uploadBucketArn
+  uploadBucketArn: uploadStack.uploadBucketArn,
+});
+
+new SensorDataStack(app, "SensorDataStack", {
+  databaseName: "HydroponicsSensorDB",
+  tableName: "HydroponicsSensorData"
 });

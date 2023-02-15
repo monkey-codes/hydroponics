@@ -1,8 +1,5 @@
-import * as cdk from "aws-cdk-lib";
-import { Construct } from "constructs";
-import { ThingWithCert } from "cdk-iot-core-certificates";
 import { ApiGatewayToLambda } from "@aws-solutions-constructs/aws-apigateway-lambda";
-import * as lambda from "aws-cdk-lib/aws-lambda";
+import * as cdk from "aws-cdk-lib";
 import {
   AuthorizationType,
   MethodLoggingLevel,
@@ -13,7 +10,10 @@ import {
   PolicyDocument,
   PolicyStatement,
 } from "aws-cdk-lib/aws-iam";
+import * as lambda from "aws-cdk-lib/aws-lambda";
 import { RetentionDays } from "aws-cdk-lib/aws-logs";
+import { ThingWithCert } from "cdk-iot-core-certificates";
+import { Construct } from "constructs";
 
 // import * as sqs from 'aws-cdk-lib/aws-sqs';
 
