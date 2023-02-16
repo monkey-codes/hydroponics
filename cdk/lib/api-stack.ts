@@ -13,6 +13,9 @@ interface APIStackProps extends cdk.StackProps {
   dynamoDBTable: Table;
   uploadBucketName: string;
   uploadBucketArn: string;
+  timestreamTableArn: string;
+  timestreamDatabaseName: string;
+  timestreamTableName: string;
 }
 
 // import * as sqs from 'aws-cdk-lib/aws-sqs';
@@ -61,10 +64,23 @@ export class APIStack extends cdk.Stack {
       "/devices/{deviceId}/cameras",
       "get-cameras.handler"
     );
+    this.addGetRoute(
+      this,
+      "/devices/{deviceId}/sensors/{aggregateFn}/{measureName}",
+      "get-sensor-data.handler",
+      this.configureSensorApiLambda(props)
+    );
     this.addTimelapseDownloadRoute(this, props);
   }
 
-  addGetRoute(scope: Construct, path: string, handler: string) {
+
+
+  addGetRoute(
+    scope: Construct,
+    path: string,
+    handler: string,
+    callback: (fn: lambda.Function) => void = (fn) => {}
+  ) {
     const id = handler.replace(".handler", "");
     const routeLambda = new lambda.Function(scope, `api-${id}`, {
       code: new lambda.AssetCode("lambdas/api"),
@@ -87,6 +103,7 @@ export class APIStack extends cdk.Stack {
       authorizationScopes: ["aws.cognito.signin.user.admin"],
     });
     this.table.grantReadData(routeLambda);
+    callback(routeLambda);
   }
 
   addTimelapseDownloadRoute(scope: Construct, props: APIStackProps) {
@@ -118,5 +135,26 @@ export class APIStack extends cdk.Stack {
       authorizer: this.jwtAuthorizer,
       authorizationScopes: ["aws.cognito.signin.user.admin"],
     });
+  }
+
+  private configureSensorApiLambda(props: APIStackProps): ((fn: lambda.Function) => void) | undefined {
+    return (fn) => {
+      fn.addToRolePolicy(
+        new PolicyStatement({
+          effect: Effect.ALLOW,
+          actions: ["timestream:Select"],
+          resources: [props.timestreamTableArn],
+        })
+      );
+      fn.addToRolePolicy(
+        new PolicyStatement({
+          effect: Effect.ALLOW,
+          actions: ["timestream:DescribeEndpoints"],
+          resources: ["*"],
+        })
+      );
+      fn.addEnvironment("TS_DATABASE_NAME", props.timestreamDatabaseName);
+      fn.addEnvironment("TS_TABLE_NAME", props.timestreamTableName);
+    };
   }
 }

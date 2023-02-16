@@ -33,14 +33,18 @@ const uploadProcessingStack = new UploadProcessingStack(
     uploadBucketArn: uploadStack.uploadBucketArn,
   }
 );
+const sensorDataStack = new SensorDataStack(app, "SensorDataStack", {
+  databaseName: "HydroponicsSensorDB",
+  tableName: "HydroponicsSensorData"
+});
 
 new APIStack(app, "APIStack", {
   dynamoDBTable: dynamodbStack.dynamoDBTable,
   uploadBucketName: uploadStack.uploadBucketName,
   uploadBucketArn: uploadStack.uploadBucketArn,
+  timestreamTableArn: sensorDataStack.table.attrArn,
+  timestreamTableName: sensorDataStack.table.tableName!,
+  timestreamDatabaseName: sensorDataStack.database.databaseName!
 });
 
-new SensorDataStack(app, "SensorDataStack", {
-  databaseName: "HydroponicsSensorDB",
-  tableName: "HydroponicsSensorData"
-});
+
