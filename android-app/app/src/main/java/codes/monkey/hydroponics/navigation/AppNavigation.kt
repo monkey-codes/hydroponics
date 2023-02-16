@@ -7,6 +7,8 @@ import androidx.navigation.compose.rememberNavController
 import codes.monkey.hydroponics.components.AutoLogoutNavigation
 import codes.monkey.hydroponics.components.ScreenScaffold
 import codes.monkey.hydroponics.screens.SplashScreen
+import codes.monkey.hydroponics.screens.devicedetails.DeviceDetailsScreen
+import codes.monkey.hydroponics.screens.devices.DevicesScreen
 import codes.monkey.hydroponics.screens.home.HomeScreen
 import codes.monkey.hydroponics.screens.login.LoginScreen
 import codes.monkey.hydroponics.screens.videoplayer.VideoPlayerScreen
@@ -27,6 +29,22 @@ fun AppNavigation() {
             AutoLogoutNavigation(navController = navController) {
                 ScreenScaffold(navController = navController, title = "Timelapse Videos") {
                     HomeScreen(navController = navController)
+                }
+            }
+        }
+        composable(AppScreens.DevicesScreen.name) {
+            AutoLogoutNavigation(navController = navController) {
+                ScreenScaffold(navController = navController, title = "Devices") {
+                    DevicesScreen(navController = navController)
+                }
+            }
+        }
+        composable(AppScreens.DeviceDetailsScreen.name+"/{deviceId}") {
+            val deviceId = it.arguments?.getString("deviceId")!!
+            AutoLogoutNavigation(navController = navController) {
+                ScreenScaffold(navController = navController, title = "Device Details") {
+
+                    DeviceDetailsScreen(navController = navController, deviceId = deviceId)
                 }
             }
         }

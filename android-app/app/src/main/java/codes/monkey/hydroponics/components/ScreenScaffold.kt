@@ -1,6 +1,5 @@
 package codes.monkey.hydroponics.components
 
-import android.content.res.Configuration
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -8,18 +7,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import codes.monkey.hydroponics.components.Constants.GUTTER_PADDING
+import codes.monkey.hydroponics.navigation.AppScreens
 import codes.monkey.hydroponics.screens.AuthViewModel
 import codes.monkey.hydroponics.ui.theme.HydroponicsAppTheme
 import kotlinx.coroutines.launch
@@ -31,16 +29,28 @@ fun ScreenScaffold(
     authViewModel: AuthViewModel = hiltViewModel(),
     content: @Composable () -> Unit = {}
 ) {
-    ScreenScaffoldContainer(title, authViewModel::logout, content)
+    ScreenScaffoldContainer(
+        title = title,
+        logout = authViewModel::logout,
+        drawerItems = { onClickCallback ->
+            NavigationDrawerItem(
+                label = { Text(text = "Devices") },
+                icon = { Icon(imageVector = Icons.Default.Star, contentDescription = "Devices")},
+                selected = false,
+                onClick = {
+                    onClickCallback()
+                    navController.navigate(AppScreens.DevicesScreen.name)
+                },
+                modifier = Modifier
+                    .padding(NavigationDrawerItemDefaults.ItemPadding)
+            )
+        },
+        content = content
+    )
 
 }
 
-@Preview(
-    uiMode = Configuration.UI_MODE_NIGHT_YES,
-    showBackground = true,
-    name = "Dark Mode Scaffold",
-    backgroundColor = -14935265
-)
+@DarkPreview
 @Composable
 fun ScreenScaffoldPreivew() {
     HydroponicsAppTheme {
@@ -53,12 +63,13 @@ fun ScreenScaffoldPreivew() {
 fun ScreenScaffoldContainer(
     title: String = "Hydroponics App",
     logout: () -> Unit = {},
+    drawerItems: @Composable (onClick: () -> Unit) -> Unit = {},
     content: @Composable () -> Unit = {}
 ) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
-    val items = listOf(Icons.Default.ExitToApp)
-    val selectedItem = remember { mutableStateOf(items[0]) }
+//    val items = listOf(Icons.Default.ExitToApp)
+//    val selectedItem = remember { mutableStateOf(items[0]) }
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
@@ -83,6 +94,11 @@ fun ScreenScaffoldContainer(
                     modifier = Modifier
                         .padding(NavigationDrawerItemDefaults.ItemPadding)
                 )
+                drawerItems() {
+                    scope.launch {
+                        drawerState.close()
+                    }
+                }
             }
         }
     ) {
