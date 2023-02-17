@@ -3,6 +3,7 @@ package codes.monkey.hydroponics.components
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -13,6 +14,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.unit.dp
 
+fun LazyListScope.loadingIndicator(loading: Boolean = false) {
+    val indicatorHeight = (Constants.GUTTER_WIDTH * 2).dp
+    if (loading) {
+        item {
+            CircularProgressIndicator(modifier = Modifier.size(indicatorHeight))
+        }
+    } else {
+        item {
+            Box(modifier = Modifier.size(indicatorHeight)) { }
+        }
+    }
+}
 @Composable
 fun <T> ListView(
     loading: Boolean = false,
@@ -26,16 +39,17 @@ fun <T> ListView(
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        val indicatorHeight = (Constants.GUTTER_WIDTH * 2).dp
-        if (loading) {
-            item {
-                CircularProgressIndicator(modifier = Modifier.size(indicatorHeight))
-            }
-        } else {
-            item {
-                Box(modifier = Modifier.size(indicatorHeight)) { }
-            }
-        }
+          this.loadingIndicator(loading = loading)
+//        val indicatorHeight = (Constants.GUTTER_WIDTH * 2).dp
+//        if (loading) {
+//            item {
+//                CircularProgressIndicator(modifier = Modifier.size(indicatorHeight))
+//            }
+//        } else {
+//            item {
+//                Box(modifier = Modifier.size(indicatorHeight)) { }
+//            }
+//        }
         items(values) {
             content(it)
         }

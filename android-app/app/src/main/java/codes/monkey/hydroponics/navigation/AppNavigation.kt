@@ -43,7 +43,6 @@ fun AppNavigation() {
             val deviceId = it.arguments?.getString("deviceId")!!
             AutoLogoutNavigation(navController = navController) {
                 ScreenScaffold(navController = navController, title = "Device Details") {
-
                     DeviceDetailsScreen(navController = navController, deviceId = deviceId)
                 }
             }

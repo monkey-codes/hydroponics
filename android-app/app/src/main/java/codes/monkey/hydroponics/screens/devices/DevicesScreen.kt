@@ -72,20 +72,9 @@ fun DeviceCard(device: Device, onClick: DeviceClickHandler) {
 @DarkPreview
 @Composable
 fun DarkDevicesList() {
-    HydroponicsAppTheme {
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background
-        ) {
-            Column(
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                ScreenScaffoldContainer(
-                    title = "Devices") {
-                    DeviceList()
-                }
-            }
-        }
+    PreviewSupport(
+        title = "Devices"
+    ) {
+        DeviceList()
     }
 }
