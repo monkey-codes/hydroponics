@@ -24,6 +24,7 @@
       - socat
       - fswebcam
       - v4l-utils
+      - sense-hat
 # PHOTOS
   - name: Copy photos script
     copy:
