@@ -5,6 +5,8 @@ import json
 import command_line_utils;
 import psutil
 import subprocess
+from sense_hat import SenseHat
+
 # Parse arguments
 cmdUtils = command_line_utils.CommandLineUtils("PubSub - Send and recieve messages through an MQTT connection.")
 cmdUtils.add_common_mqtt_commands()
@@ -18,6 +20,7 @@ cmdUtils.register_command("client_id", "<str>", "Client ID to use for MQTT conne
 cmdUtils.register_command("count", "<int>", "The number of messages to send (optional, default='10').", default=10, type=int)
 # Needs to be called so the command utils parse the commands
 cmdUtils.get_args()
+sense = SenseHat()
 
 # Callback when connection is accidentally lost.
 def on_connection_interrupted(connection, error, **kwargs):
@@ -53,6 +56,10 @@ def get_sensor_data():
     cam_count = subprocess.check_output('lsusb | grep CAM | wc -l', shell=True, text=True)
     device_id = subprocess.check_output('cat /sys/class/net/eth0/address', shell=True, text=True).strip()
     rpi_model = subprocess.check_output('cat /sys/firmware/devicetree/base/model', shell=True, text=True).strip().replace('\u0000', '')
+    temp = round(sense.get_temperature(),1)
+    pres = round(sense.get_pressure(),1)
+    hum = round(sense.get_humidity(),1)
+
     data = {
         "cpu_percent": psutil.cpu_percent(interval=1, percpu=False),
         "cpu_temp": cpu_temp['cpu_thermal'][0].current,
@@ -64,6 +71,9 @@ def get_sensor_data():
         "disk_usage_used_mb": disk_usage.used//(1024*1024),
         "disk_usage_free_mb": disk_usage.free//(1024*1024),
         "webcam_count": int(cam_count.strip()),
+        "temperature": temp,
+        "barometric_pressure": pres,
+        "humidity": hum,
         "device_id": device_id,
         "rpi_model": rpi_model
 
