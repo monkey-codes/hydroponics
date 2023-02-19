@@ -13,7 +13,7 @@
       name: hydro
       state: present
       shell: /bin/bash
-      groups: hydro,sudo,video
+      groups: hydro,sudo,video,input
 
   - name: Install packages
     ansible.builtin.apt:
