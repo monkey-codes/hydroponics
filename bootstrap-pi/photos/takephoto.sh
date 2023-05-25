@@ -17,5 +17,6 @@ for CAMERA in /dev/video*; do
         UPLOAD_PATH=$DEVICE_ID/photos/$CAMERA_ID/$FILE_NAME
 	    echo "uploading $FILE_PATH to $UPLOAD_PATH"
    	    echo "$FILE_PATH|$UPLOAD_PATH" | socat - UNIX-CONNECT:/home/hydro/upload.sock
+		sleep 15
 	fi
 done
